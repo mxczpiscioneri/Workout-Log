@@ -1,4 +1,45 @@
 var ActivitiesBox = React.createClass({
+	getInitialState: function () {
+		var activities = JSON.parse(localStorage.getItem('activities')) || [];
+		var timeTotal = localStorage.getItem('timeTotal') || "0:00";
+		return {
+			data: activities,
+			timeTotal: timeTotal
+		};
+	},
+	generateId: function () {
+		return Math.floor(Math.random()*90000) + 10000;
+	},
+	timestrToSec: function (timestr) {
+		var parts = timestr.split(":");
+  	return (parts[0] * 3600) + (parts[1] * 60);
+  },
+	pad: function (num) {
+		if(num < 10) {
+	    return "0" + num;
+	  } else {
+	    return "" + num;
+	  }
+  },
+	formatTime: function (seconds) {
+		return [this.pad(Math.floor(seconds/3600)%60),
+          this.pad(Math.floor(seconds/60)%60)].join(":");
+  },
+	handleSubmit: function (activity) {
+		var data = this.state.data;
+		var timeTotal = this.state.timeTotal;
+		var id = this.generateId().toString();
+		var date = activity.date;
+		var time = activity.time;
+		var type = activity.type;
+		data = data.concat([{id, date, time, type}]);
+		timeTotal = this.formatTime(this.timestrToSec(timeTotal) + this.timestrToSec(time))
+		this.setState({data});
+		this.setState({timeTotal});
+
+		localStorage.setItem('activities', JSON.stringify(data));
+		localStorage.setItem('timeTotal', timeTotal);
+	},
 	render: function() {
 		return (
 			<div className="grid-container bg-white margin-top-xl">
