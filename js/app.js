@@ -45,6 +45,7 @@ var ActivitiesBox = React.createClass({
 			<div className="grid-container bg-white margin-top-xl">
 				<Header />
 				<AddActivity onActivitySubmit={this.handleSubmit} />
+				<ListActivities data={this.state.data} removeNode={this.handleNodeRemoval} />
 			</div>
 		);
 	}
@@ -126,6 +127,39 @@ var AddActivity = React.createClass({
 
 			</div>
 
+		);
+	}
+});
+
+var ListActivities = React.createClass({
+	removeNode: function (nodeId) {
+		this.props.removeNode(nodeId);
+		return;
+	},
+	render: function() {
+		var listNodes = this.props.data.map(function (listItem) {
+			return (
+				<ActivityItem date={listItem.date} type={listItem.type} time={listItem.time} nodeId={listItem.id} removeNode={this.removeNode} />
+			);
+		},this);
+		return (
+			<div className="grid-row margin-top-xl">
+				<div className="grid-xs-10 grid-xs-offset-1 margin-top-xl">
+					<table className="table margin-top-xl">
+		    		<thead className="table-header text-lg text-white">
+		    			<tr className="bg-primary">
+		    				<td className="padding-sm">Date</td>
+		    				<td className="padding-sm">Type</td>
+		    				<td className="padding-sm">Time</td>
+		    				<td className="padding-sm"></td>
+		    			</tr>
+		    		</thead>
+		    		<tbody className="table-body text-sm text-default">
+		        	{listNodes}
+		    		</tbody>
+		    	</table>
+	    	</div>
+    	</div>
 		);
 	}
 });
