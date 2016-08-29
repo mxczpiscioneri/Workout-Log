@@ -25,6 +25,22 @@ var ActivitiesBox = React.createClass({
 		return [this.pad(Math.floor(seconds/3600)%60),
           this.pad(Math.floor(seconds/60)%60)].join(":");
   },
+	handleNodeRemoval: function (nodeId) {
+		var data = this.state.data;
+		var timeTotal = this.state.timeTotal;
+		var time = data.filter(function (el) {
+			return el.id === nodeId;
+		});
+		data = data.filter(function (el) {
+			return el.id !== nodeId;
+		});
+		timeTotal = this.formatTime(this.timestrToSec(timeTotal) - this.timestrToSec(time[0].time))
+		this.setState({data});
+		this.setState({timeTotal});
+		localStorage.setItem('activities', JSON.stringify(data));
+		localStorage.setItem('timeTotal', timeTotal);
+		return;
+	},
 	handleSubmit: function (activity) {
 		var data = this.state.data;
 		var timeTotal = this.state.timeTotal;
@@ -165,6 +181,11 @@ var ListActivities = React.createClass({
 });
 
 var ActivityItem = React.createClass({
+	removeNode: function (e) {
+		e.preventDefault();
+		this.props.removeNode(this.props.nodeId);
+		return;
+	},
 	render: function() {
 		var date = new Date(this.props.date);
 		return (
