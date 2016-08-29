@@ -1,0 +1,23 @@
+//Sass variables
+@import 'global';
+
+//Mixin
+@import 'mixin';
+
+body{
+  background: url('../img/background.jpg') no-repeat center center fixed;
+  @include prefixer("background-size", cover);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-body tr:hover {
+  background: $color-light;
+}
+
+.table-body tr td {
+  border-bottom: 1px solid $color-lightgray;
+}

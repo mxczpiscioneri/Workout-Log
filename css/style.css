@@ -1,0 +1,21 @@
+body {
+  background: url("../img/background.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -ms-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-body tr:hover {
+  background: #FCFCFC;
+}
+
+.table-body tr td {
+  border-bottom: 1px solid #dbe4e3;
+}
