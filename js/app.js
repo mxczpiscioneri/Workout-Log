@@ -164,6 +164,20 @@ var ListActivities = React.createClass({
 	}
 });
 
+var ActivityItem = React.createClass({
+	render: function() {
+		var date = new Date(this.props.date);
+		return (
+			<tr>
+				<td className="padding-lg">{date.toLocaleDateString("en-US")}</td>
+				<td className="padding-lg">{this.props.type}</td>
+				<td className="padding-lg">{this.props.time}</td>
+				<td className="padding-lg align-right"><i className="text-lg text-red pointer padding-xs" title="Remove activity" onClick={this.removeNode}>&times;</i></td>
+			</tr>
+		);
+	}
+});
+
 ReactDOM.render(
 	<ActivitiesBox />,
 	document.getElementById('content')
