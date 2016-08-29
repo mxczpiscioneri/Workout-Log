@@ -62,6 +62,7 @@ var ActivitiesBox = React.createClass({
 				<Header />
 				<AddActivity onActivitySubmit={this.handleSubmit} />
 				<ListActivities data={this.state.data} removeNode={this.handleNodeRemoval} />
+				<TotalActivities timeTotal={this.state.timeTotal} />
 			</div>
 		);
 	}
@@ -198,6 +199,19 @@ var ActivityItem = React.createClass({
 		);
 	}
 });
+
+var TotalActivities = React.createClass({
+	render: function() {
+		return (
+			<div className="grid-row bg-light margin-top-xl padding-top-xl padding-bottom-xl">
+				<div className="grid-xs-10 grid-xs-offset-1">
+					<h2 className="text-primary text-lg align-right">Total time: <b>{this.props.timeTotal}</b></h2>
+				</div>
+			</div>
+		);
+	}
+});
+
 
 ReactDOM.render(
 	<ActivitiesBox />,
