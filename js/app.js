@@ -98,13 +98,39 @@ var ActivitiesBox = React.createClass({
 		localStorage.setItem('activities', JSON.stringify(data));
 		localStorage.setItem('timeTotal', timeTotal);
 	},
+	sortObject: function (property) {
+		var sortOrder = 1;
+    if(property[0] === "-") {
+        sortOrder = -1;
+        property = property.substr(1);
+    }
+    return function (a,b) {
+        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+        return result * sortOrder;
+    }
+	},
+	handleOrderDate: function () {
+		var data = this.state.data;
+		data = data.sort(this.sortObject("date"));
+		this.setState({data});
+	},
+	handleOrderType: function () {
+		var data = this.state.data;
+		data = data.sort(this.sortObject("type"));
+		this.setState({data});
+	},
+	handleOrderTime: function () {
+		var data = this.state.data;
+		data = data.sort(this.sortObject("time"));
+		this.setState({data});
+	},
 	render: function() {
 		return (
 			<div className="grid-container bg-white">
 				<Header />
 				<Notification message={this.state.message} classNotification={this.state.classNotification} />
 				<AddActivity onActivitySubmit={this.handleSubmit} />
-				<ListActivities data={this.state.data} removeNode={this.handleNodeRemoval} />
+				<ListActivities data={this.state.data} removeNode={this.handleNodeRemoval} orderDate={this.handleOrderDate} orderType={this.handleOrderType} orderTime={this.handleOrderTime} />
 				<TotalActivities timeTotal={this.state.timeTotal} activityTotal={this.state.data.length} />
 			</div>
 		);
@@ -228,11 +254,42 @@ var AddActivity = React.createClass({
 });
 
 var ListActivities = React.createClass({
+	getInitialState: function () {
+    return {
+    	sortDate: false,
+    	sortType: false,
+    	sortTime: false
+    };
+  },
 	removeNode: function (nodeId) {
 		this.props.removeNode(nodeId);
 		return;
 	},
+	orderDate: function () {
+		this.props.orderDate();
+		this.setState({sortDate: true});
+		this.setState({sortType: false});
+		this.setState({sortTime: false});
+		return;
+	},
+	orderType: function () {
+		this.props.orderType();
+		this.setState({sortDate: false});
+		this.setState({sortType: true});
+		this.setState({sortTime: false})
+		return;
+	},
+	orderTime: function () {
+		this.props.orderTime();
+		this.setState({sortDate: false});
+		this.setState({sortType: false});
+		this.setState({sortTime: true});
+		return;
+	},
 	render: function() {
+		var sortDate = this.state.sortDate ? 'img/sort-descending.png' : 'img/sort-variant.png';
+		var sortType = this.state.sortType ? 'img/sort-descending.png' : 'img/sort-variant.png';
+		var sortTime = this.state.sortTime ? 'img/sort-descending.png' : 'img/sort-variant.png';
 		var listNodes = this.props.data.map(function (listItem) {
 			return (
 				<ActivityItem date={listItem.date} type={listItem.type} time={listItem.time} nodeId={listItem.id} removeNode={this.removeNode} />
@@ -244,9 +301,9 @@ var ListActivities = React.createClass({
 					<table className="table margin-top-xl">
 		    		<thead className="table-header text-lg text-white">
 		    			<tr className="bg-primary">
-		    				<td className="padding-sm">Date</td>
-		    				<td className="padding-sm">Activity</td>
-		    				<td className="padding-sm">Time</td>
+		    				<td className="padding-sm pointer" onClick={this.orderDate}>Date <img src={sortDate} className="align-middle" alt="Sort"/></td>
+		    				<td className="padding-sm pointer" onClick={this.orderType}>Activity <img src={sortType} className="align-middle" alt="Sort"/></td>
+		    				<td className="padding-sm pointer" onClick={this.orderTime}>Time <img src={sortTime} className="align-middle" alt="Sort"/></td>
 		    				<td className="padding-sm"></td>
 		    			</tr>
 		    		</thead>
@@ -270,7 +327,7 @@ var ActivityItem = React.createClass({
 		var date = new Date(this.props.date);
 		return (
 			<tr>
-				<td className="padding-lg">{date.toLocaleDateString("pt-BR")}</td>
+				<td className="padding-lg">{date.toLocaleDateString('en-US', {timeZone: 'UTC'})}</td>
 				<td className="padding-lg">{this.props.type}</td>
 				<td className="padding-lg">{this.props.time}</td>
 				<td className="padding-lg align-right"><i className="remove invisible text-lg text-red pointer padding-xs" title="Remove activity" onClick={this.removeNode}>&times;</i></td>
