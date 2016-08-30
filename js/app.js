@@ -58,11 +58,11 @@ var ActivitiesBox = React.createClass({
 	},
 	render: function() {
 		return (
-			<div className="grid-container bg-white margin-top-xl">
+			<div className="grid-container bg-white">
 				<Header />
 				<AddActivity onActivitySubmit={this.handleSubmit} />
 				<ListActivities data={this.state.data} removeNode={this.handleNodeRemoval} />
-				<TotalActivities timeTotal={this.state.timeTotal} />
+				<TotalActivities timeTotal={this.state.timeTotal} activityTotal={this.state.data.length} />
 			</div>
 		);
 	}
@@ -81,26 +81,55 @@ var Header = React.createClass({
 });
 
 var AddActivity = React.createClass({
+	getInitialState: function () {
+		return {
+			errorDate: '',
+			errorType: '',
+			errorTime: '',
+		};
+	},
 	doSubmit: function (e) {
 		e.preventDefault();
-
+		var error = false;
 		var data = {
-			time: this.refs.time.value.trim(),
+			date: this.refs.date.value.trim(),
 			type: this.refs.type.value.trim(),
-			date: this.refs.date.value.trim()
+			time: this.refs.time.value.trim()
 		}
-		if (!data.time || !data.type || !data.date) {
-			alert('Complete the fields!');
-			return;
-		} else{
-			this.refs.time.value = '';
-			this.refs.type.value = '';
+		if (!data.date) {
+			this.setState({errorDate: 'Ops! Date is required.'});
+			error = true;
+		} else {
+			this.setState({errorDate: ''});
+			error = false;
+		}
+		if (!data.type) {
+			this.setState({errorType: 'Ops! Activity is required.'});
+			error = true;
+		} else {
+			this.setState({errorType: ''});
+			error = false;
+		}
+		if (!data.time) {
+			this.setState({errorTime: 'Ops! Time is required...'});
+			error = true;
+		} else {
+			this.setState({errorTime: ''});
+			error = false;
+		}
+
+		if (!error) {
 			this.refs.date.value = '';
+			this.refs.type.value = '';
+			this.refs.time.value = '';
+			this.props.onActivitySubmit(data);
 		}
-		this.props.onActivitySubmit(data);
 		return;
 	},
 	render: function() {
+		var errorDate = this.state.errorDate; 
+		var errorType = this.state.errorType; 
+		var errorTime = this.state.errorTime; 
 		return (
 			<div className="">
 
@@ -112,12 +141,15 @@ var AddActivity = React.createClass({
 
 				<div className="grid-row">
 					<form className="form" onSubmit={this.doSubmit}>
-						<div className="grid-xs-2 grid-xs-offset-1">
-							<input className="field text-field-lg" ref="time" type="time" placeholder="time"/>
+						<div className="grid-xs-3 grid-xs-offset-1">
+							<label className="text-sm text-secondary">Date (dd/mm/aaaa)</label>
+							<input className="field text-field-lg" ref="date" type="date"/>
+							<small className="text-xs text-red margin-top-xl padding-top-xl margin-left-lg absolute position-left">{errorDate == "" ? "" : errorDate}</small>
 						</div>
 						<div className="grid-xs-3">
+							<label className="text-sm text-secondary">Activity</label>
 							<select className="field text-field-lg" ref="type">
-								<option value="" disabled selected>Select activity...</option>
+								<option value="" disabled selected>Select...</option>
 								<option value="Aerobics">Aerobics</option>
 								<option value="Crossfit">Crossfit</option>
 								<option value="Cycling">Cycling</option>
@@ -132,11 +164,15 @@ var AddActivity = React.createClass({
 								<option value="Walking">Walking</option>
 								<option value="Other">Other</option>
 							</select>
-						</div>
-						<div className="grid-xs-3">
-							<input className="field text-field-lg" ref="date" type="date" placeholder="date"/>
+							<small className="text-xs text-red margin-top-xl padding-top-xl margin-left-lg absolute position-left">{errorType == "" ? "" : errorType}</small>
 						</div>
 						<div className="grid-xs-2">
+							<label className="text-sm text-secondary">Time spent (hh:mm)</label>
+							<input className="field text-field-lg" ref="time" type="time" placeholder="time"/>
+							<small className="text-xs text-red margin-top-xl padding-top-xl margin-left-lg absolute position-left">{errorTime == "" ? "" : errorTime}</small>
+						</div>
+						<div className="grid-xs-2">
+							<label className="text-sm text-secondary">&nbsp;</label>
 							<button className="btn-lg btn-secondary bg-darkgray" type="submit">Add</button>
 						</div>
 					</form>
@@ -166,7 +202,7 @@ var ListActivities = React.createClass({
 		    		<thead className="table-header text-lg text-white">
 		    			<tr className="bg-primary">
 		    				<td className="padding-sm">Date</td>
-		    				<td className="padding-sm">Type</td>
+		    				<td className="padding-sm">Activity</td>
 		    				<td className="padding-sm">Time</td>
 		    				<td className="padding-sm"></td>
 		    			</tr>
@@ -191,10 +227,11 @@ var ActivityItem = React.createClass({
 		var date = new Date(this.props.date);
 		return (
 			<tr>
-				<td className="padding-lg">{date.toLocaleDateString("en-US")}</td>
+				<td className="padding-lg">{date.toLocaleDateString("pt-BR")}</td>
+				<td className="padding-lg">{this.props.date}</td>
 				<td className="padding-lg">{this.props.type}</td>
 				<td className="padding-lg">{this.props.time}</td>
-				<td className="padding-lg align-right"><i className="text-lg text-red pointer padding-xs" title="Remove activity" onClick={this.removeNode}>&times;</i></td>
+				<td className="padding-lg align-right"><i className="remove invisible text-lg text-red pointer padding-xs" title="Remove activity" onClick={this.removeNode}>&times;</i></td>
 			</tr>
 		);
 	}
@@ -204,7 +241,10 @@ var TotalActivities = React.createClass({
 	render: function() {
 		return (
 			<div className="grid-row bg-light margin-top-xl padding-top-xl padding-bottom-xl">
-				<div className="grid-xs-10 grid-xs-offset-1">
+				<div className="grid-xs-5 grid-xs-offset-1">
+					<h2 className="text-secondary text-lg">Total activity: <b>{this.props.activityTotal}</b></h2>
+				</div>
+				<div className="grid-xs-5">
 					<h2 className="text-primary text-lg align-right">Total time: <b>{this.props.timeTotal}</b></h2>
 				</div>
 			</div>
