@@ -1,10 +1,25 @@
+var Notification = React.createClass({
+	render: function() {
+  	var classNotification = this.props.classNotification;
+  	classNotification = classNotification == '' ? 'hidden' : classNotification
+    return (
+    	<div className={classNotification}>
+	    	<div className="absolute position-top position-left position-right bg-darkgray">
+					<p className="text-white text-sm bold align-center">{this.props.message}</p>
+				</div>
+			</div>
+    );
+  }
+});
+
 var ActivitiesBox = React.createClass({
 	getInitialState: function () {
 		var activities = JSON.parse(localStorage.getItem('activities')) || [];
 		var timeTotal = localStorage.getItem('timeTotal') || "0:00";
 		return {
 			data: activities,
-			timeTotal: timeTotal
+			timeTotal: timeTotal,
+			classNotification: ''
 		};
 	},
 	generateId: function () {
@@ -25,6 +40,16 @@ var ActivitiesBox = React.createClass({
 		return [this.pad(Math.floor(seconds/3600)%60),
           this.pad(Math.floor(seconds/60)%60)].join(":");
   },
+	scrollToTop: function (scrollDuration) {
+		var scrollStep = -window.scrollY / (scrollDuration / 15),
+        scrollInterval = setInterval(function(){
+        if ( window.scrollY != 0 ) {
+            window.scrollBy( 0, scrollStep );
+        }
+        else clearInterval(scrollInterval); 
+    },15);
+		return scrollStep;
+  },
 	handleNodeRemoval: function (nodeId) {
 		var data = this.state.data;
 		var timeTotal = this.state.timeTotal;
@@ -37,6 +62,15 @@ var ActivitiesBox = React.createClass({
 		timeTotal = this.formatTime(this.timestrToSec(timeTotal) - this.timestrToSec(time[0].time))
 		this.setState({data});
 		this.setState({timeTotal});
+		this.setState({message: 'Successfully removed!'});
+		this.setState({classNotification: 'show'});
+
+		this.scrollToTop(600);
+		//hide notification
+		setTimeout(function() {
+      this.setState({classNotification: ''});
+    }.bind(this), 10000);
+
 		localStorage.setItem('activities', JSON.stringify(data));
 		localStorage.setItem('timeTotal', timeTotal);
 		return;
@@ -52,6 +86,14 @@ var ActivitiesBox = React.createClass({
 		timeTotal = this.formatTime(this.timestrToSec(timeTotal) + this.timestrToSec(time))
 		this.setState({data});
 		this.setState({timeTotal});
+		this.setState({message: 'Successfully added!'});
+		this.setState({classNotification: 'show'});
+
+		this.scrollToTop(600);
+		//hide notification
+		setTimeout(function() {
+      this.setState({classNotification: ''});
+    }.bind(this), 10000);
 
 		localStorage.setItem('activities', JSON.stringify(data));
 		localStorage.setItem('timeTotal', timeTotal);
@@ -60,6 +102,7 @@ var ActivitiesBox = React.createClass({
 		return (
 			<div className="grid-container bg-white">
 				<Header />
+				<Notification message={this.state.message} classNotification={this.state.classNotification} />
 				<AddActivity onActivitySubmit={this.handleSubmit} />
 				<ListActivities data={this.state.data} removeNode={this.handleNodeRemoval} />
 				<TotalActivities timeTotal={this.state.timeTotal} activityTotal={this.state.data.length} />
@@ -228,7 +271,6 @@ var ActivityItem = React.createClass({
 		return (
 			<tr>
 				<td className="padding-lg">{date.toLocaleDateString("pt-BR")}</td>
-				<td className="padding-lg">{this.props.date}</td>
 				<td className="padding-lg">{this.props.type}</td>
 				<td className="padding-lg">{this.props.time}</td>
 				<td className="padding-lg align-right"><i className="remove invisible text-lg text-red pointer padding-xs" title="Remove activity" onClick={this.removeNode}>&times;</i></td>
