@@ -339,10 +339,28 @@ var ActivityItem = React.createClass({
 	},
 	render: function() {
 		var date = new Date(this.props.date);
+		var iconType;
+		switch (this.props.type) {
+      case "Aerobics":   				iconType = "img/ic_aerobics.png"; break;
+      case "Crossfit": 					iconType = "img/ic_crossfit.png"; break;
+      case "Cycling":  					iconType = "img/ic_biking.png"; break;
+      case "Dancing":  					iconType = "img/ic_dancing.png"; break;
+      case "Gymnastics":  			iconType = "img/ic_gymnastics.png"; break;
+      case "Martial Arts":  		iconType = "img/ic_martial_arts.png"; break;
+      case "Pilates":  					iconType = "img/ic_pilates.png"; break;
+      case "Running":  					iconType = "img/ic_running.png"; break;
+      case "Sports":  					iconType = "img/ic_football_soccer.png"; break;
+      case "Strength Training": iconType = "img/ic_strength_training.png"; break;
+      case "Swimming":  				iconType = "img/ic_swimming.png"; break;
+      case "Walking":  					iconType = "img/ic_walking.png"; break;
+      case "Other":  						iconType = "img/ic_other.png"; break;
+      default:      						iconType = "img/ic_other.png"; break;
+    }
 		return (
 			<tr>
 				<td className="padding-lg">{date.toLocaleDateString('en-US', {timeZone: 'UTC'})}</td>
-				<td className="padding-lg">{this.props.type}</td>
+				<td className="padding-lg">
+					<img src={iconType} alt={this.props.type} className="bg-gray bd-radius-circle align-middle margin-right-sm" />{this.props.type}</td>
 				<td className="padding-lg">{this.props.time}</td>
 				<td className="padding-lg align-right"><i className="remove invisible text-lg text-red pointer padding-xs" title="Remove activity" onClick={this.removeNode}>&times;</i></td>
 			</tr>
