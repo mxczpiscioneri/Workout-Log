@@ -126,10 +126,19 @@ var ActivitiesBox = React.createClass({
 		data = data.sort(this.sortObject("time"));
 		this.setState({data});
 	},
+	handleLogout: function (nodeId) {
+		localStorage.setItem('auth', false);
+		window.location.href= "login.html";
+		return;
+	},
 	render: function() {
+		if(localStorage.getItem('auth') != "true"){
+			this.handleLogout();
+			return;
+		}
 		return (
 			<div className="grid-container">
-				<Header />
+				<Header logout={this.handleLogout} />
 				<Notification message={this.state.message} messageIcon={this.state.messageIcon} classNotification={this.state.classNotification} />
 				<AddActivity onActivitySubmit={this.handleSubmit} />
 				<ListActivities data={this.state.data} removeNode={this.handleNodeRemoval} orderDate={this.handleOrderDate} orderType={this.handleOrderType} orderTime={this.handleOrderTime} />
@@ -147,7 +156,7 @@ var Header = React.createClass({
 					<h1 className="text-white text-xl">Workout Log</h1>
 				</div>
 				<div className="grid-xs-5 align-right">
-					<p className="padding-top-sm text-sm text-white">Matheus Piscioneri | <a href="#" className="logout">logout</a></p>
+					<p className="padding-top-sm text-sm text-white">Matheus Piscioneri | <a onClick={this.props.logout} className="logout pointer">logout</a></p>
 				</div>
 			</div>
 		);
