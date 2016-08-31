@@ -9,15 +9,42 @@ body{
   @include prefixer("background-size", cover);
 }
 
+.grid-container {
+	margin-top: px-to-em($height-xl);
+}
+
+.header {
+	background-color: rgba($color-secondary, 0.8);
+}
+
+.logout {
+	color: #f58f91;
+}
+
+.content {
+	background-color: rgba($color-white, 0.96);
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.table-body tr:hover {
-  background: $color-light;
+.table-body tr {
+  &:hover {
+    background: $color-light;
+
+    i.remove {
+      visibility: visible;
+    }
+  }
+
+  td {
+    border-bottom: $border-xs solid $color-gray;
+  }
 }
 
-.table-body tr td {
-  border-bottom: 1px solid $color-lightgray;
+.field {
+	outline: none;
+	color: $color-secondary;
 }

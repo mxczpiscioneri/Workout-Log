@@ -5,7 +5,7 @@ var Notification = React.createClass({
     return (
     	<div className={classNotification}>
 	    	<div className="absolute position-top position-left position-right bg-darkgray">
-					<p className="text-white text-sm bold align-center">{this.props.message}</p>
+					<p className="text-white text-sm bold align-center"><img src={this.props.messageIcon} alt={this.props.message} className="align-middle margin-right-xs" />{this.props.message}</p>
 				</div>
 			</div>
     );
@@ -62,7 +62,8 @@ var ActivitiesBox = React.createClass({
 		timeTotal = this.formatTime(this.timestrToSec(timeTotal) - this.timestrToSec(time[0].time))
 		this.setState({data});
 		this.setState({timeTotal});
-		this.setState({message: 'Successfully removed!'});
+		this.setState({messageIcon: "img/close-circle.png"});
+		this.setState({message: "Successfully removed!"});
 		this.setState({classNotification: 'show'});
 
 		this.scrollToTop(600);
@@ -86,7 +87,8 @@ var ActivitiesBox = React.createClass({
 		timeTotal = this.formatTime(this.timestrToSec(timeTotal) + this.timestrToSec(time))
 		this.setState({data});
 		this.setState({timeTotal});
-		this.setState({message: 'Successfully added!'});
+		this.setState({messageIcon: "img/check-circle.png"});
+		this.setState({message: "Successfully added!"});
 		this.setState({classNotification: 'show'});
 
 		this.scrollToTop(600);
@@ -126,9 +128,9 @@ var ActivitiesBox = React.createClass({
 	},
 	render: function() {
 		return (
-			<div className="grid-container bg-white">
+			<div className="grid-container">
 				<Header />
-				<Notification message={this.state.message} classNotification={this.state.classNotification} />
+				<Notification message={this.state.message} messageIcon={this.state.messageIcon} classNotification={this.state.classNotification} />
 				<AddActivity onActivitySubmit={this.handleSubmit} />
 				<ListActivities data={this.state.data} removeNode={this.handleNodeRemoval} orderDate={this.handleOrderDate} orderType={this.handleOrderType} orderTime={this.handleOrderTime} />
 				<TotalActivities timeTotal={this.state.timeTotal} activityTotal={this.state.data.length} />
@@ -140,9 +142,12 @@ var ActivitiesBox = React.createClass({
 var Header = React.createClass({
 	render: function() {
 		return (
-			<div className="grid-row bg-secondary padding-top-xl padding-bottom-xl">
-				<div className="grid-xs-10 grid-xs-offset-1">
-					<h1 className="text-white text-xl align-center">Workout Log</h1>
+			<div className="header grid-row padding-top-xl padding-bottom-xl">
+				<div className="grid-xs-5 grid-xs-offset-1">
+					<h1 className="text-white text-xl">Workout Log</h1>
+				</div>
+				<div className="grid-xs-5 align-right">
+					<p className="padding-top-sm text-sm text-white">Matheus Piscioneri | <a href="#" className="logout">logout</a></p>
 				</div>
 			</div>
 		);
@@ -202,21 +207,21 @@ var AddActivity = React.createClass({
 		return (
 			<div className="">
 
-				<div className="grid-row padding-top-xl">
+				<div className="grid-row content padding-top-xl">
 					<div className="grid-xs-10 grid-xs-offset-1">
 						<h1 className="text-secondary text-lg">Insert an Item</h1>
 					</div>
 				</div>
 
-				<div className="grid-row">
+				<div className="grid-row content">
 					<form className="form" onSubmit={this.doSubmit}>
 						<div className="grid-xs-3 grid-xs-offset-1">
-							<label className="text-sm text-secondary">Date (dd/mm/aaaa)</label>
+							<label className="text-sm padding-bottom-xs inline-block text-secondary">Date (dd/mm/aaaa)</label>
 							<input className="field text-field-lg" ref="date" type="date"/>
 							<small className="text-xs text-red margin-top-xl padding-top-xl margin-left-lg absolute position-left">{errorDate == "" ? "" : errorDate}</small>
 						</div>
 						<div className="grid-xs-3">
-							<label className="text-sm text-secondary">Activity</label>
+							<label className="text-sm padding-bottom-xs inline-block text-secondary">Activity</label>
 							<select className="field text-field-lg" ref="type">
 								<option value="" disabled selected>Select...</option>
 								<option value="Aerobics">Aerobics</option>
@@ -236,13 +241,13 @@ var AddActivity = React.createClass({
 							<small className="text-xs text-red margin-top-xl padding-top-xl margin-left-lg absolute position-left">{errorType == "" ? "" : errorType}</small>
 						</div>
 						<div className="grid-xs-2">
-							<label className="text-sm text-secondary">Time spent (hh:mm)</label>
+							<label className="text-sm padding-bottom-xs inline-block text-secondary">Time spent (hh:mm)</label>
 							<input className="field text-field-lg" ref="time" type="time" placeholder="time"/>
 							<small className="text-xs text-red margin-top-xl padding-top-xl margin-left-lg absolute position-left">{errorTime == "" ? "" : errorTime}</small>
 						</div>
 						<div className="grid-xs-2">
-							<label className="text-sm text-secondary">&nbsp;</label>
-							<button className="btn-lg btn-secondary bg-darkgray" type="submit">Add</button>
+							<label className="text-sm padding-bottom-xs inline-block text-secondary">&nbsp;</label>
+							<button className="btn-lg btn-primary" type="submit">Add</button>
 						</div>
 					</form>
 				</div>
@@ -295,25 +300,34 @@ var ListActivities = React.createClass({
 				<ActivityItem date={listItem.date} type={listItem.type} time={listItem.time} nodeId={listItem.id} removeNode={this.removeNode} />
 			);
 		},this);
-		return (
-			<div className="grid-row margin-top-xl">
-				<div className="grid-xs-10 grid-xs-offset-1 margin-top-xl">
-					<table className="table margin-top-xl">
-		    		<thead className="table-header text-lg text-white">
-		    			<tr className="bg-primary">
-		    				<td className="padding-sm pointer" onClick={this.orderDate}>Date <img src={sortDate} className="align-middle" alt="Sort"/></td>
-		    				<td className="padding-sm pointer" onClick={this.orderType}>Activity <img src={sortType} className="align-middle" alt="Sort"/></td>
-		    				<td className="padding-sm pointer" onClick={this.orderTime}>Time <img src={sortTime} className="align-middle" alt="Sort"/></td>
-		    				<td className="padding-sm"></td>
-		    			</tr>
-		    		</thead>
-		    		<tbody className="table-body text-sm text-default">
-		        	{listNodes}
-		    		</tbody>
-		    	</table>
+		if(this.props.data.length > 0) {
+			return (
+				<div className="grid-row padding-top-xl content">
+					<div className="grid-xs-10 grid-xs-offset-1">
+						<table className="table">
+			    		<thead className="table-header text-lg text-darkgray">
+			    			<tr className="bg-gray">
+			    				<td className="padding-sm pointer" onClick={this.orderDate}>Date <img src={sortDate} className="align-middle" alt="Sort"/></td>
+			    				<td className="padding-sm pointer" onClick={this.orderType}>Activity <img src={sortType} className="align-middle" alt="Sort"/></td>
+			    				<td className="padding-sm pointer" onClick={this.orderTime}>Time <img src={sortTime} className="align-middle" alt="Sort"/></td>
+			    				<td className="padding-sm"></td>
+			    			</tr>
+			    		</thead>
+			    		<tbody className="table-body text-sm text-default">
+			        	{listNodes}
+			    		</tbody>
+			    	</table>
+		    	</div>
 	    	</div>
-    	</div>
-		);
+			);
+		} else {
+			return (
+				<div className="grid-row padding-top-xl content">
+					<div className="grid-xs-10 grid-xs-offset-1">
+					</div>
+	    	</div>
+			);
+		}
 	}
 });
 
@@ -338,16 +352,20 @@ var ActivityItem = React.createClass({
 
 var TotalActivities = React.createClass({
 	render: function() {
-		return (
-			<div className="grid-row bg-light margin-top-xl padding-top-xl padding-bottom-xl">
-				<div className="grid-xs-5 grid-xs-offset-1">
-					<h2 className="text-secondary text-lg">Total activity: <b>{this.props.activityTotal}</b></h2>
+		if(this.props.activityTotal > 0) {
+			return (
+				<div className="grid-row content padding-top-xl padding-bottom-xl">
+					<div className="grid-xs-5 grid-xs-offset-1">
+						<h2 className="text-secondary text-md">Total activity: <span className="bold">{this.props.activityTotal}</span></h2>
+					</div>
+					<div className="grid-xs-5">
+						<h2 className="text-primary text-md align-right">Total time: <span className="bold">{this.props.timeTotal}</span></h2>
+					</div>
 				</div>
-				<div className="grid-xs-5">
-					<h2 className="text-primary text-lg align-right">Total time: <b>{this.props.timeTotal}</b></h2>
-				</div>
-			</div>
-		);
+			);
+		} else {
+			return <div></div>;
+		}
 	}
 });
 
