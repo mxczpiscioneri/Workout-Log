@@ -10,7 +10,10 @@ body{
 }
 
 .grid-container {
-	margin-top: px-to-em($height-xl);
+  margin-top: px-to-em($height-xl);
+  &.login {
+    max-width: 600px;
+  }
 }
 
 .header {

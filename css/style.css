@@ -11,6 +11,10 @@ body {
   margin-top: 3.75em;
 }
 
+.grid-container.login {
+  max-width: 600px;
+}
+
 .header {
   background-color: rgba(64, 64, 64, 0.8);
 }
