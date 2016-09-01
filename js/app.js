@@ -179,26 +179,33 @@ var AddActivity = React.createClass({
 			type: this.refs.type.value.trim(),
 			time: this.refs.time.value.trim()
 		}
+		var currentDate = new Date();
+		var minDate = (currentDate.getFullYear()-1)+"/"+currentDate.getMonth()+"/"+currentDate.getDate();
+		var maxDate = (currentDate.getFullYear()+1)+"/"+currentDate.getMonth()+"/"+currentDate.getDate();
+
 		if (!data.date) {
 			this.setState({errorDate: 'Ops! Date is required.'});
 			error = true;
+		} else if (data.date < minDate || data.date > maxDate) {
+			this.setState({errorDate: 'Ops! Date invalid.'});
+			error = true;
 		} else {
 			this.setState({errorDate: ''});
-			error = false;
 		}
 		if (!data.type) {
 			this.setState({errorType: 'Ops! Activity is required.'});
 			error = true;
 		} else {
 			this.setState({errorType: ''});
-			error = false;
 		}
 		if (!data.time) {
-			this.setState({errorTime: 'Ops! Time is required...'});
+			this.setState({errorTime: 'Ops! Time is required.'});
+			error = true;
+		} else if (data.time == '00:00') {
+			this.setState({errorTime: 'Ops! Time invalid.'});
 			error = true;
 		} else {
 			this.setState({errorTime: ''});
-			error = false;
 		}
 
 		if (!error) {
