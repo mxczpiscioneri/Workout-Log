@@ -1,26 +1,111 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="UTF-8">
+    <title>Workout-log by mxczpiscioneri</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Workout Log</title>
-    <link href="css/normalize.css" rel="stylesheet" type="text/css">
-    <link href="css/acsset.css" rel="stylesheet" type="text/css">
-    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
+    <section class="page-header">
+      <h1 class="project-name">Workout-log</h1>
+      <h2 class="project-tagline">Workout log - HTML SASS React</h2>
+      <a href="https://github.com/mxczpiscioneri/Workout-Log" class="btn">View on GitHub</a>
+      <a href="https://github.com/mxczpiscioneri/Workout-Log/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/mxczpiscioneri/Workout-Log/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <div id="content"></div>
-    
-    <!--[if lt IE 9]>
-      <script type="text/javascript" src="js/html5shiv.js"></script>
-    <![endif]-->
-    <script src="js/react.js"></script>
-    <script src="js/react-dom.js"></script>
-    <script src="js/browser.min.js"></script>
-    <script type="text/babel" src="js/app.js"></script>
+    <section class="main-content">
+      <h1>
+<a id="workout-log" class="anchor" href="#workout-log" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Workout log</h1>
+
+<p>Você deve implementar um workout log utilizando HTML 5, CSS 3 (preferencialmente usando SASS) e Javascript (bem estruturado e modularizado).</p>
+
+<p><strong>O workout log deve ter as seguintes features:</strong></p>
+
+<ul>
+<li>Um local para inserir itens de workout.</li>
+<li>Uma tabela com os itens.</li>
+<li>Um botão para remover o item.</li>
+<li>Um contador com o total de horas exercitadas.</li>
+</ul>
+
+<p>Abaixo segue o link do mock da tela:
+<a href="https://www.evernote.com/shard/s6/sh/6db363ef-f8c1-4d8f-b619-b87889953cdc/ea1c6f7ebbc930e95f8012687fea9be6">https://www.evernote.com/shard/s6/sh/6db363ef-f8c1-4d8f-b619-b87889953cdc/ea1c6f7ebbc930e95f8012687fea9be6</a></p>
+
+<p>Favor, seguir o mockup.</p>
+
+<p>Você deve implementar o workout log de acordo com o mock, mas lembre-se que isto é apenas um mock e nós estamos aberto a novas ideias sobre como deveria ser o funcionamento.</p>
+
+<p><strong>Requerimentos</strong></p>
+
+<ul>
+<li>Você deve usar HTML 5 e frameworks modernos como AngularJS, BackboneJS or React.</li>
+<li>Você pode usar Coffeescript ou ES6 transpilers. </li>
+<li>EVITE utilizar Twitter Bootstrap ou Zurb Foundation. Se você quer reusabilidade, escolha Bourbon/Neat/Refills ou (bom frameworks similares). </li>
+<li>O design é importante mas a UX é mais importante (Validações, controles de usuários, navegações e etc).<br>
+</li>
+<li>Você pode nos surpreender, mas nunca esqueça as 4 principais funcionalidades.<br>
+</li>
+<li>Você não precisa de um backend, podendo somente implementar no browser usando memória ou local storage.</li>
+<li>Você deve utilizar o git.</li>
+<li>Você deve criar um repositório privado no Bitbucket ou Github. </li>
+<li>Testes são bem vindos (fazem a diferença).</li>
+</ul>
+
+<hr>
+
+<h2>
+<a id="desenvolvimento" class="anchor" href="#desenvolvimento" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Desenvolvimento</h2>
+
+<p>Para o desenvolvimento do Workout log, foi utilizado HTML5, SASS, ACSSET e React.</p>
+
+<p><strong>Informações:</strong></p>
+
+<ul>
+<li>O <a href="https://github.com/mxczpiscioneri/acsset">ACSSET</a> é um framework CSS baseado em helpers, desenvolvido por mim.</li>
+<li>Foi criado uma página de login (estático) para demonstrar o controle de usuários.</li>
+<li>Para acessar o sistema utilize o e-mail "<a href="mailto:mxczpiscioner@gmail.com">mxczpiscioner@gmail.com</a>" e a senha "123456".</li>
+<li>As atividades disponibilizadas foram baseadas nas atividades do <a href="https://www.google.com/fit/">Google Fit</a>.</li>
+<li>Os dados estão sendo salvos em local storage.</li>
+<li>Foi adicionado uma validação na data para permitir inserir no máximo 1 ano antes ou 1 ano depois da data atual.</li>
+<li>Foi adicionado ordenações na tabela de atividades.</li>
+<li>
+<p>Foi adicionado o total de atividades realizadas.</p>
+
+<hr>
+
+<p><strong>Chamada:</strong></p>
+
+<p>http://localhost/workout/login.html</p>
+
+<hr>
+
+<p><strong>Observações</strong>:</p>
+</li>
+<li><p>É necessário usar um servidor para rodar os arquivos, pode ser local.</p></li>
+<li>Infelizmente não consegui implementar o teste unitário, por falta de tempo para o estudo do mesmo com React.
+***</li>
+</ul>
+
+<p><strong>Sugestões não implementadas:</strong></p>
+
+<ul>
+<li>Inserir filtros e busca para as atividades cadastradas.</li>
+<li>Criar relatórios gerais, por data e por atividades.</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/mxczpiscioneri/Workout-Log">Workout-log</a> is maintained by <a href="https://github.com/mxczpiscioneri">mxczpiscioneri</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
   </body>
-
 </html>
